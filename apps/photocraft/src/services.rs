@@ -249,7 +249,14 @@ fn show_file_dialog(request: FileDialogRequest, parent: Option<&eframe::Frame>, 
                     }
                 })
             }
-            #[cfg(not(target_os = "linux"))]
+            // On macOS PhotoCraft's own panel with a Format pop-up (#6490); rfd shows none.
+            #[cfg(target_os = "macos")]
+            {
+                let _ = dialog;
+                let picked = crate::mac_save_panel::save(filters, name, dir);
+                Box::pin(async move { picked.await.map(FileDialogAnswer::SaveTo) })
+            }
+            #[cfg(not(any(target_os = "linux", target_os = "macos")))]
             {
                 let _ = filters;
                 let picked = dialog.save_file();

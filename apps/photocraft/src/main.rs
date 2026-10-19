@@ -51,6 +51,9 @@ mod gpu_startup;
 mod icon_theme;
 #[cfg(target_os = "macos")]
 mod mac_menu;
+// Save As with a Format pop-up (#6490); its pure helpers are tested everywhere.
+#[cfg(any(target_os = "macos", test))]
+mod mac_save_panel;
 #[cfg(target_os = "macos")]
 mod mac_window;
 // Pure logic is tested on every platform; only Linux runs the check.
